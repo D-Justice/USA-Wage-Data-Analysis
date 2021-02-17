@@ -55,7 +55,7 @@ elif ASCDSC == "Lowest" or ASCDSC == "lowest":
         if count > howmany:
             break
         else:
-            print("\n", row[1],"-------------", "$", wage)
+            print(row[1],"-------------", "$", wage)
     print("\n===Skipped", nullcount,"entries due to insufficient data===")
 
 else:
@@ -65,12 +65,24 @@ else:
 highGrowRate = 0.0
 highGrowJob = None
 count = 0
+
 YN = input('\n\nWould you like to see additional data? Y/N ')
 if YN == "Y" or YN == "y":
     print("\nGrowth Rate of these positions: ")
+    if ASCDSC == "Highest" or ASCDSC == "highest":
+        try:
+            cur.execute('SELECT * FROM Data ORDER BY Wage2018 DESC')
+        except Exception as i:
+            print(i)
+    elif ASCDSC == "Lowest" or ASCDSC == "lowest":
+        cur.execute('SELECT * FROM Data ORDER BY Wage2018 ASC')
+
+    else:
+        print("ERROR: Please type either Y or N to continue")
+
     for row in cur:
         count = count + 1
-        if count >= howmany:
+        if count >= howmany + 1:
             break
         else:
             try:
@@ -79,9 +91,9 @@ if YN == "Y" or YN == "y":
                 #=====BUG====== - getting traceback saying row[x] is str but is actually float as show by type(row[x])
 
                 median = round(median, 2)
-                print("\nGrowth of",row[1],"= %",median, "average per year")
+                print("Growth of",row[1],"= %",median, "average per year")
             except Exception as i:
-                print("\nError finding historical data for:",row[0], row[1])
+                print("Error finding historical data for:",row[0], row[1])
                 continue
 
             if median > highGrowRate:
