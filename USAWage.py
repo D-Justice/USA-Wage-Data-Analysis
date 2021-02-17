@@ -1,13 +1,11 @@
 import sqlite3
-import ssl
-import re
 import csv
 
 conn = sqlite3.connect('data.sqlite')
 cur = conn.cursor()
 
 cur.execute('''CREATE TABLE IF NOT EXISTS Data
-            (ID INTEGER, position TEXT, Wage2014 TEXT, Wage2015 TEXT, Wage2016 TEXT, Wage2017 TEXT, Wage2018 TEXT)''')
+            (ID INTEGER, position TEXT, Wage2014 INTEGER, Wage2015 INTEGER, Wage2016 INTEGER, Wage2017 INTEGER, Wage2018 INTEGER)''')
 
 id = 0
 
@@ -28,8 +26,8 @@ with open('Data USA Cart.csv', newline='') as File:
 
         cur.execute('''INSERT OR REPLACE INTO Data(ID, position, Wage2014, Wage2015, Wage2016, Wage2017, Wage2018)
         VALUES (?, ?, ?, ?, ?, ?, ?)''', (id, position, wage2014, wage2015, wage2016, wage2017, wage2018))
-        conn.commit()
+conn.commit()
 
-print('Commited: ',id, 'items!')
+print('Committed: ',id, 'items!')
 
 cur.close()

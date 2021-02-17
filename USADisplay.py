@@ -1,6 +1,5 @@
 import sqlite3
-import ssl
-import re
+
 
 
 conn = sqlite3.connect('data.sqlite')
@@ -8,6 +7,7 @@ cur = conn.cursor()
 
 
 count = 0
+nullcount = 0
 ASCDSC = input("Would you like to see the Highest or Lowest wages? ")
 
 if ASCDSC == "Highest" or ASCDSC == "highest":
@@ -23,6 +23,7 @@ if ASCDSC == "Highest" or ASCDSC == "highest":
 
     for row in cur:
         if row[6] == "" or row[6] == "Average Wage (2018)":
+            nullcount += 1
             continue
         count = count + 1
         wage = float(row[6])
@@ -31,6 +32,7 @@ if ASCDSC == "Highest" or ASCDSC == "highest":
             break
         else:
             print(row[1],"-------------", "$", wage)
+    print("\n===Skipped", nullcount,"entries due to insufficient data===")
 
 elif ASCDSC == "Lowest" or ASCDSC == "lowest":
 
@@ -45,6 +47,7 @@ elif ASCDSC == "Lowest" or ASCDSC == "lowest":
 
     for row in cur:
         if row[6] == "" or row[6] == "Average Wage (2018)":
+            nullcount += 1
             continue
         count = count + 1
         wage = float(row[6])
@@ -53,6 +56,7 @@ elif ASCDSC == "Lowest" or ASCDSC == "lowest":
             break
         else:
             print(row[1],"-------------", "$", wage)
+    print("\n===Skipped", nullcount,"entries due to insufficient data===")
 
 else:
     print("ERROR: Please enter either 'Highest' or 'Lowest'")
